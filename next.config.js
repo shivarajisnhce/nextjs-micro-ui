@@ -1,20 +1,39 @@
-const { NextFederationPlugin } = require('@module-federation/nextjs-mf');
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.cache = false;
+    }
+    
+    config.experiments = {
+      ...config.experiments,
+      topLevelAwait: true,
+    };
 
-module.exports = {
-  webpack(config) {
-    config.plugins.push(
-      new NextFederationPlugin({
-        name: 'container',
-        filename: 'static/chunks/remoteEntry.js',
-        remotes: {
-          micro_ui: 'micro_ui@http://localhost:3001/remoteEntry.js',
-        },
-        shared: {
-          react: { singleton: true, eager: true },
-          'react-dom': { singleton: true, eager: true },
-        },
-      })
-    );
     return config;
   },
+  
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'Access-Control-Allow-Origin',
+            value: '*',
+          },
+          {
+            key: 'Access-Control-Allow-Methods',
+            value: 'GET, POST, PUT, DELETE, OPTIONS',
+          },
+          {
+            key: 'Access-Control-Allow-Headers',
+            value: 'X-Requested-With, Content-Type, Authorization',
+          },
+        ],
+      },
+    ];
+  },
 };
+
+module.exports = nextConfig;
