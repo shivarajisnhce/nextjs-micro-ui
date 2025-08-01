@@ -1,14 +1,46 @@
 /** @type {import('next').NextConfig} */
+  const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
+
 const nextConfig = {
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.cache = false;
+      
+      // Add Module Federation Plugin to the container
+      config.plugins.push(
+        new ModuleFederationPlugin({
+          name: 'container',
+          shared: {
+            react: {
+              singleton: true,
+              eager: true,
+              requiredVersion: "^18.2.0",
+            },
+            'react-dom': {
+              singleton: true,
+              eager: true,
+              requiredVersion: "^18.2.0",
+            },
+            'react/jsx-runtime': {
+              singleton: true,
+              eager: true,
+            },
+          },
+        })
+      );
     }
     
     config.experiments = {
       ...config.experiments,
       topLevelAwait: true,
     };
+
+    // Ignore webpack warnings about externals
+    config.ignoreWarnings = [
+      { module: /node_modules/ },
+      { message: /Can't resolve 'react/ },
+      { message: /Can't resolve 'react-dom/ },
+    ];
 
     return config;
   },

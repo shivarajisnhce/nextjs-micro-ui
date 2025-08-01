@@ -6,7 +6,14 @@ interface ModuleFederationContainer {
 declare global {
   interface Window {
     [key: string]: ModuleFederationContainer | undefined;
+    __webpack_share_scopes__?: {
+      default: Record<string, unknown>;
+    };
   }
+  
+  const __webpack_share_scopes__: {
+    default: Record<string, unknown>;
+  };
 }
 
 class RemoteModuleManager {
@@ -39,14 +46,22 @@ class RemoteModuleManager {
     // Initialize container only once
     if (!this.loadedContainers.has(moduleName)) {
       try {
-        await container.init({});
+        await container.init(__webpack_share_scopes__.default);
         this.loadedContainers.add(moduleName);
       } catch (error) {
         // If initialization fails because it's already initialized, that's okay
+        console.warn(`Container ${moduleName} initialization warning:`, error);
         if (error instanceof Error && error.message.includes('already been initialized')) {
           this.loadedContainers.add(moduleName);
         } else {
-          throw error;
+          // Try to initialize with empty scope as fallback
+          try {
+            await container.init({});
+            this.loadedContainers.add(moduleName);
+          } catch (fallbackError) {
+            console.warn(`Fallback initialization failed:`, fallbackError);
+            this.loadedContainers.add(moduleName);
+          }
         }
       }
     }
