@@ -15,7 +15,7 @@ export default function Home() {
     : "http://localhost:3003/remoteEntry.js";
 
   const searchUrl = isProduction
-    ? "https://emiqapassportmicrouiwesa.z6.web.core.windows.net/qa/search-ui/remoteEntry.js"
+    ? "https://emiqapassportmicrouiwesa.z6.web.core.windows.net/qa/northstar-searchui/remoteEntry.js"
     : "http://localhost:3004/remoteEntry.js";
 
   return (
