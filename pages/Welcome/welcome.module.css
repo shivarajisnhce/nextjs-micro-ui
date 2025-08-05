@@ -1,0 +1,62 @@
+.welcome-card {
+  padding: 16px;
+  border-radius: 0;
+  border: none;
+  max-width: none;
+  margin: 0;
+  background-color: transparent;
+  height: 100%;
+  width: 100%;
+  box-shadow: none;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.welcome-title {
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #2f3a4a;
+}
+
+.welcome-subtitle {
+  color: #66788a;
+  margin-bottom: 16px;
+}
+
+.welcome-item {
+  align-items: flex-start;
+  padding-left: 0;
+}
+
+.welcome-icon-box {
+  min-width: 40px;
+  margin-top: 4px;
+}
+
+.welcome-icon {
+  font-size: 32px;
+  color: #3f78f5;
+  background-color: #f0f4ff;
+  border-radius: 8px;
+  padding: 6px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .welcome-card {
+    padding: 16px;
+  }
+
+  .welcome-title {
+    font-size: 1rem;
+  }
+
+  .welcome-subtitle {
+    font-size: 0.875rem;
+  }
+
+  .welcome-icon {
+    font-size: 28px;
+    padding: 4px;
+  }
+}
