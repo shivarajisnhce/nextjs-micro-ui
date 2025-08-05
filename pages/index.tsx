@@ -1,31 +1,60 @@
+import dynamic from 'next/dynamic';
 import React from 'react';
-import { RemoteComponent } from '../components/RemoteComponent';
 import Welcome from './Welcome/welcome';
 import styles from './Home.module.css'; // CSS Module
 
+
+const NavigationApp = dynamic(
+  () => {
+    if (typeof window !== 'undefined') {
+      return import('navigation_ui/NavigationApp' as any).catch(() => {
+        return () => <div>Navigation UI not available</div>;
+      });
+    }
+    return Promise.resolve(() => <div>Loading...</div>);
+  },
+  {
+    ssr: false, // This is crucial - prevents SSR for federated modules
+    loading: () => <p>Loading Navigation...</p>
+  }
+);
+
+const RecommendationsApp = dynamic(
+  () => {
+    if (typeof window !== 'undefined') {
+      return import('recommendations_ui/RecommendationsApp' as any).catch(() => {
+        return () => <div>Recommendations UI not available</div>;
+      });
+    }
+    return Promise.resolve(() => <div>Loading...</div>);
+  },
+  {
+    ssr: false, // This is crucial - prevents SSR for federated modules
+    loading: () => <p>Loading Recommendations...</p>
+  }
+);
+
+const SearchApp = dynamic(
+  () => {
+    if (typeof window !== 'undefined') {
+      return import('search_ui/SearchApp' as any).catch(() => {
+        return () => <div>Search UI not available</div>;
+      });
+    }
+    return Promise.resolve(() => <div>Loading...</div>);
+  },
+  {
+    ssr: false, // This is crucial - prevents SSR for federated modules
+    loading: () => <p>Loading Recommendations...</p>
+  }
+);
+
 export default function Home() {
-  const isProduction = process.env.NODE_ENV === 'production';
-
-  const navigationUrl = isProduction
-    ? "https://emiqapassportmicrouiwesa.z6.web.core.windows.net/qa/navigation-ui/remoteEntry.js"
-    : "http://localhost:3002/remoteEntry.js";
-
-  const recommendationsUrl = isProduction
-    ? "https://emiqapassportmicrouiwesa.z6.web.core.windows.net/qa/recommendations-ui/remoteEntry.js"
-    : "http://localhost:3003/remoteEntry.js";
-
-  const searchUrl = isProduction
-    ? "https://emiqapassportmicrouiwesa.z6.web.core.windows.net/qa/northstar-searchui/remoteEntry.js"
-    : "http://localhost:3004/remoteEntry.js";
-
   return (
+
     <div className={styles.container}>
       <div className={styles.navigation}>
-        <RemoteComponent
-          remoteUrl={navigationUrl}
-          moduleName="navigation_ui"
-          appName="./NavigationApp"
-        />
+        <NavigationApp />
       </div>
 
       <div className={styles.welcome}>
@@ -33,20 +62,13 @@ export default function Home() {
       </div>
 
       <div className={styles.search}>
-        <RemoteComponent
-          remoteUrl={searchUrl}
-          moduleName="search_ui"
-          appName="./SearchApp"
-        />
+        <SearchApp />
       </div>
 
       <div className={styles.recommendations}>
-        <RemoteComponent
-          remoteUrl={recommendationsUrl}
-          moduleName="recommendations_ui"
-          appName="./RecommendationsApp"
-        />
+        <RecommendationsApp />
       </div>
     </div>
+
   );
 }

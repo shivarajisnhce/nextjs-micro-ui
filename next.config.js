@@ -1,15 +1,21 @@
 /** @type {import('next').NextConfig} */
-  const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
+const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
 
 const nextConfig = {
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.cache = false;
-      
+
       // Add Module Federation Plugin to the container
       config.plugins.push(
         new ModuleFederationPlugin({
           name: 'container',
+          remotes: {
+            navigation_ui: 'navigation_ui@https://emiqapassportmicrouiwesa.z6.web.core.windows.net/qa/navigation-ui/remoteEntry.js',
+            recommendations_ui: 'recommendations_ui@https://emiqapassportmicrouiwesa.z6.web.core.windows.net/qa/recommendations-ui/remoteEntry.js',
+            search_ui: 'search_ui@https://emiqapassportmicrouiwesa.z6.web.core.windows.net/qa/northstar-searchui/remoteEntry.js',
+          },
+          filename: 'static/chunks/remoteEntry.js',
           shared: {
             react: {
               singleton: true,
@@ -29,7 +35,7 @@ const nextConfig = {
         })
       );
     }
-    
+
     config.experiments = {
       ...config.experiments,
       topLevelAwait: true,
@@ -44,7 +50,7 @@ const nextConfig = {
 
     return config;
   },
-  
+
   async headers() {
     return [
       {
