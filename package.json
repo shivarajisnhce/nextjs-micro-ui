@@ -5,7 +5,7 @@
     "dev": "cross-env NEXT_PRIVATE_LOCAL_WEBPACK=true next dev",
     "dev:qa": "cross-env NEXT_PRIVATE_LOCAL_WEBPACK=true env-cmd -f .env.qa next dev",
     "dev:staging": "cross-env NEXT_PRIVATE_LOCAL_WEBPACK=true env-cmd -f .env.staging next dev",
-    "build": "cross-env NODE_ENV=production NEXT_PRIVATE_LOCAL_WEBPACK=true next build",
+    "build": "cross-env NODE_ENV=production NEXT_PRIVATE_LOCAL_WEBPACK=true env-cmd -f .env.qa next build",
     "build:qa": "cross-env NODE_ENV=production NEXT_PRIVATE_LOCAL_WEBPACK=true env-cmd -f .env.qa next build",
     "build:staging": "cross-env NODE_ENV=production NEXT_PRIVATE_LOCAL_WEBPACK=true env-cmd -f .env.staging next build",
     "start": "next start",
