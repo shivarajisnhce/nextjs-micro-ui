@@ -1,4 +1,5 @@
 /** @type {import('next').NextConfig} */
+const { env } = require('process');
 const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
 
 const nextConfig = {
@@ -11,9 +12,9 @@ const nextConfig = {
         new ModuleFederationPlugin({
           name: 'container',
           remotes: {
-            navigation_ui: 'navigation_ui@https://emiqapassportmicrouiwesa.z6.web.core.windows.net/qa/navigation-ui/remoteEntry.js',
-            recommendations_ui: 'recommendations_ui@https://emiqapassportmicrouiwesa.z6.web.core.windows.net/qa/recommendations-ui/remoteEntry.js',
-            search_ui: 'search_ui@https://emiqapassportmicrouiwesa.z6.web.core.windows.net/qa/northstar-searchui/remoteEntry.js',
+            navigation_ui: `navigation_ui@${process.env.NEXT_PUBLIC_NAVIGATION_UI_URL}`,
+            recommendations_ui: `recommendations_ui@${process.env.NEXT_PUBLIC_RECOMMENDATIONS_UI_URL}`,
+            search_ui: `search_ui@${process.env.NEXT_PUBLIC_SEARCH_UI_URL}`,
           },
           filename: 'static/chunks/remoteEntry.js',
           shared: {
